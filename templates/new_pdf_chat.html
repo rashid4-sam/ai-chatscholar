@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>PDF Chat - Upload Your Documents</title>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+    <!-- Animated Background -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <svg class="absolute inset-0 h-full w-full stroke-blue-200/50 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+            aria-hidden="true">
+            <defs>
+                <pattern id="grid-pattern" width="200" height="200" x="50%" y="-1" patternUnits="userSpaceOnUse">
+                    <path d="M.5 200V.5H200" fill="none" stroke-width="1" />
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" stroke-width="0" fill="url(#grid-pattern)" />
+        </svg>
+        <div class="absolute top-20 left-20 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute top-40 right-20 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-10 px-6 py-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3 group">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                    ChatScholar
+                </h1>
+            </a>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-full text-xs font-bold text-white shadow-lg">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    FLASH-2.5 + LangChain
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 py-8 lg:py-12">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            
+            <!-- Left Content -->
+            <div class="space-y-8">
+                <!-- Header -->
+                <div class="space-y-4">
+                    <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-blue-200">
+                        <div class="flex items-center gap-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse animation-delay-200"></div>
+                            <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse animation-delay-400"></div>
+                        </div>
+                        <span class="text-sm font-semibold text-gray-700">AI Document Intelligence</span>
+                    </div>
+
+                    <h1 class="text-5xl lg:text-6xl font-bold tracking-tight">
+                        <span class="block text-gray-900">Chat with Your</span>
+                        <span class="block bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                            PDFs Using AI
+                        </span>
+                    </h1>
+
+                    <p class="text-xl text-gray-600 leading-relaxed">
+                        Upload your documents and start asking questions. Our AI understands context, extracts insights, and provides accurate answers instantly.
+                    </p>
+                </div>
+
+                <!-- Upload Form -->
+                <form action="/process" method="post" enctype="multipart/form-data" id="uploadForm" class="space-y-6">
+                    <!-- File Upload Area -->
+                    <div class="relative">
+                        <label for="pdf_docs" class="block text-sm font-semibold text-gray-700 mb-3">
+                            Upload PDF Documents
+                        </label>
+                        <div class="relative group">
+                            <input type="file" 
+                                name="pdf_docs" 
+                                id="pdf_docs" 
+                                accept=".pdf" 
+                                multiple 
+                                required
+                                class="hidden"
+                                onchange="updateFileList(this)">
+                            <label for="pdf_docs" 
+                                class="flex flex-col items-center justify-center w-full h-48 border-3 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-white/60 backdrop-blur-sm hover:bg-white/80 hover:border-blue-500 transition-all duration-300 group-hover:shadow-xl">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-12 h-12 mb-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                    </svg>
+                                    <p class="mb-2 text-sm font-semibold text-gray-700">
+                                        <span class="text-blue-600">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p class="text-xs text-gray-500">PDF files only (Multiple files supported)</p>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <!-- File List Display -->
+                        <div id="fileList" class="mt-4 space-y-2 hidden"></div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                        id="submitBtn"
+                        class="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-600 px-8 py-4 rounded-2xl text-base font-semibold text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        <span id="buttonText">Process Documents</span>
+                    </button>
+                </form>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" class="hidden bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <svg class="animate-spin h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <div>
+                            <p class="text-blue-900 font-semibold">Processing your documents...</p>
+                            <p class="text-blue-600 text-sm mt-1">This may take a moment. Please don't close this page.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
+                        <div class="text-2xl font-bold text-blue-600">Unlimited</div>
+                        <div class="text-xs text-gray-600 mt-1">Questions</div>
+                    </div>
+                    <div class="text-center p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
+                        <div class="text-2xl font-bold text-indigo-600">Smart</div>
+                        <div class="text-xs text-gray-600 mt-1">Context</div>
+                    </div>
+                    <div class="text-center p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
+                        <div class="text-2xl font-bold text-purple-600">Instant</div>
+                        <div class="text-xs text-gray-600 mt-1">Answers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content - Preview -->
+            <div class="relative lg:mt-0 mt-8">
+                <div class="relative">
+                    <!-- Glow Effect -->
+                    <div class="absolute -top-8 -left-8 w-72 h-72 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-3xl opacity-20 blur-3xl"></div>
+                    <div class="absolute -bottom-8 -right-8 w-72 h-72 bg-gradient-to-br from-purple-400 to-pink-500 rounded-3xl opacity-20 blur-3xl"></div>
+                    
+                    <!-- Main Preview -->
+                    <div class="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200 p-8 hover:shadow-3xl transition-all duration-500">
+                        <img src="https://res.cloudinary.com/dtsuvx8dz/image/upload/v1708164754/gwohsoi1xgpuq2fmryay.png"
+                            alt="PDF Chat Interface Preview"
+                            class="w-full h-auto rounded-2xl shadow-xl">
+                        
+                        <!-- Floating Features -->
+                        <div class="absolute -top-4 -right-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-6 py-3 rounded-2xl shadow-xl font-bold flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Secure</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="grid grid-cols-2 gap-4 mt-8">
+                    <div class="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Encrypted</h3>
+                                <p class="text-xs text-gray-600 mt-1">Your files stay private</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 text-sm">Fast Processing</h3>
+                                <p class="text-xs text-gray-600 mt-1">Results in seconds</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateFileList(input) {
+            const fileList = document.getElementById('fileList');
+            const files = input.files;
+            
+            if (files.length > 0) {
+                fileList.classList.remove('hidden');
+                fileList.innerHTML = '';
+                
+                Array.from(files).forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'flex items-center gap-3 bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-gray-200 shadow-sm';
+                    fileItem.innerHTML = `
+                        <svg class="w-8 h-8 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-900 truncate">${file.name}</p>
+                            <p class="text-xs text-gray-500">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        </div>
+                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+            } else {
+                fileList.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const submitBtn = document.getElementById('submitBtn');
+            const buttonText = document.getElementById('buttonText');
+            
+            loadingIndicator.classList.remove('hidden');
+            submitBtn.disabled = true;
+            buttonText.textContent = 'Processing...';
+        });
+    </script>
+
+    <style>
+        @keyframes blob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-200 {
+            animation-delay: 0.2s;
+        }
+        .animation-delay-400 {
+            animation-delay: 0.4s;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+    </style>
+</body>
+
+</html>

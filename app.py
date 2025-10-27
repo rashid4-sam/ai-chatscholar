@@ -30,7 +30,7 @@ rubric_text = ""
 
 # OpenRouter client for chat
 openai_client = ChatOpenAI(
-    api_key = "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",
+    api_key = "api_key",
     model = "meta-llama/llama-3.3-8b-instruct:free",
     openai_api_base="https://openrouter.ai/api/v1",
 )
@@ -89,7 +89,7 @@ def get_vectorstore(text_chunks):
 def get_conversation_chain(vectorstore):
     # Use the OpenRouter ChatOpenAI for conversation
     llm = ChatOpenAI(
-        api_key="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",
+        api_key="api_key",
         model="google/gemini-2.5-flash",
         openai_api_base="https://openrouter.ai/api/v1",
     )
